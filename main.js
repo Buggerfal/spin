@@ -1172,7 +1172,7 @@ function () {
         arrowAnimationXBias: 30,
         arrowAnimationYBias: 10,
         arrowScale: 0.3,
-        boyScale: 0.35
+        boyScale: 0.25
       },
       times: {
         arrowAnimationTime: 500,
@@ -1246,8 +1246,6 @@ function () {
       this._data['isActive'] = false;
 
       this._initArrowAnimation();
-
-      console.log(this._sprite.state);
     }
   }, {
     key: "_initArrowAnimation",
@@ -1303,7 +1301,7 @@ function () {
           moveBoyAnimationTime = _this$_data$times.moveBoyAnimationTime,
           awaitTime = _this$_data$times.awaitTime;
 
-      this._sprite.state.addAnimation(1, 'hoverboard', true, 0);
+      this._sprite.state.setAnimation(1, 'hoverboard', true, 0);
 
       this._moveTween = new tween_js__WEBPACK_IMPORTED_MODULE_2___default.a.Tween(this._container).to({
         x: x - boyXOffSetForMeeting * direction,
