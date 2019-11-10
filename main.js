@@ -819,11 +819,13 @@ function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _engine_Starter__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
-/* harmony import */ var _utils_GraphicsHelper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(63);
-/* harmony import */ var _engine_Resizable__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(66);
-/* harmony import */ var _settings_appSettings__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(57);
-/* harmony import */ var _components_Boy__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(68);
-/* harmony import */ var pixi_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(3);
+/* harmony import */ var tween_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(58);
+/* harmony import */ var tween_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(tween_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _utils_GraphicsHelper__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(63);
+/* harmony import */ var _engine_Resizable__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(66);
+/* harmony import */ var _settings_appSettings__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(57);
+/* harmony import */ var _components_Boy__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(68);
+/* harmony import */ var pixi_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(3);
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -848,7 +850,8 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
-window['PIXI'] = pixi_js__WEBPACK_IMPORTED_MODULE_5__;
+
+window['PIXI'] = pixi_js__WEBPACK_IMPORTED_MODULE_6__;
 
 __webpack_require__(69);
 
@@ -872,15 +875,35 @@ function (_Resizable) {
       1: [],
       2: []
     };
+    _this._data = {
+      positions: {}
+    };
 
     _this._drawScene();
 
     _this._drawStage();
 
+    _this._startGame();
+
+    _this._initialAnimationTime = 3000;
     return _this;
   }
 
   _createClass(MainScene, [{
+    key: "_startGame",
+    value: function _startGame() {
+      var _this2 = this;
+
+      var a = {
+        x: 10
+      };
+      this._hintTween = new tween_js__WEBPACK_IMPORTED_MODULE_1___default.a.Tween(a).to({
+        x: 0
+      }, 3000).onComplete(function () {
+        _this2.setInteractiveForAllPlayers();
+      }).start();
+    }
+  }, {
     key: "loadResources",
     value: function loadResources() {
       if (!this._resources) {
@@ -904,12 +927,12 @@ function (_Resizable) {
   }, {
     key: "_drawStage",
     value: function _drawStage() {
-      var _this2 = this;
+      var _this3 = this;
 
       var app = _engine_Starter__WEBPACK_IMPORTED_MODULE_0__["default"].app;
       app.stage.interactive = true;
       this.loadResources().then(function (_el) {
-        _this2._addPlayers();
+        _this3._addPlayers();
       });
     }
   }, {
@@ -921,7 +944,7 @@ function (_Resizable) {
   }, {
     key: "_addPlayers",
     value: function _addPlayers() {
-      var _this3 = this;
+      var _this4 = this;
 
       var xOffSet = 150;
       var yOffSet = 180;
@@ -941,14 +964,25 @@ function (_Resizable) {
             team: i,
             id: j + 1
           };
-          var boy = new _components_Boy__WEBPACK_IMPORTED_MODULE_4__["Boy"](settings);
+          var boy = new _components_Boy__WEBPACK_IMPORTED_MODULE_5__["Boy"](settings);
           boy.on('checkКeadiness', function (obj) {
-            _this3._checkКeadiness(obj);
+            _this4._checkКeadiness(obj);
           });
 
           this._players["".concat(i)].push(boy);
         }
       }
+    }
+  }, {
+    key: "setInteractiveForAllPlayers",
+    value: function setInteractiveForAllPlayers() {
+      this._players['1'].forEach(function (el) {
+        return el.turnOnInteractive();
+      });
+
+      this._players['2'].forEach(function (el) {
+        return el.turnOnInteractive();
+      });
     }
   }, {
     key: "_movePlayers",
@@ -1019,19 +1053,19 @@ function (_Resizable) {
   }, {
     key: "_drawScene",
     value: function _drawScene() {
-      var _this4 = this;
+      var _this5 = this;
 
       var _starter$app$screen = _engine_Starter__WEBPACK_IMPORTED_MODULE_0__["default"].app.screen,
           width = _starter$app$screen.width,
           height = _starter$app$screen.height;
-      this._container = _utils_GraphicsHelper__WEBPACK_IMPORTED_MODULE_1__["default"].createContainer({});
+      this._container = _utils_GraphicsHelper__WEBPACK_IMPORTED_MODULE_2__["default"].createContainer({});
 
       this._container.setParent(_engine_Starter__WEBPACK_IMPORTED_MODULE_0__["default"].app.stage);
 
-      this._substrate = _utils_GraphicsHelper__WEBPACK_IMPORTED_MODULE_1__["default"].createColorContainer({
+      this._substrate = _utils_GraphicsHelper__WEBPACK_IMPORTED_MODULE_2__["default"].createColorContainer({
         width: width,
         height: height,
-        color: _settings_appSettings__WEBPACK_IMPORTED_MODULE_3__["default"].colors.mainSceneBg
+        color: _settings_appSettings__WEBPACK_IMPORTED_MODULE_4__["default"].colors.mainSceneBg
       });
 
       this._substrate.setParent(this._container);
@@ -1040,7 +1074,7 @@ function (_Resizable) {
         fill: "0xffffff",
         fontSize: 20
       };
-      this._button = _utils_GraphicsHelper__WEBPACK_IMPORTED_MODULE_1__["default"].createColorContainer({
+      this._button = _utils_GraphicsHelper__WEBPACK_IMPORTED_MODULE_2__["default"].createColorContainer({
         width: 200,
         height: 75,
         color: "0x660000",
@@ -1049,11 +1083,11 @@ function (_Resizable) {
         text: 'Introduce players',
         textStyle: textStyle,
         onClick: function onClick() {
-          _this4._movePlayers();
+          _this5._movePlayers();
 
-          _this4._resetAllPlayersStatus();
+          _this5._resetAllPlayersStatus();
 
-          _this4.hideButton();
+          _this5.hideButton();
         }
       });
 
@@ -1084,7 +1118,7 @@ function (_Resizable) {
   }]);
 
   return MainScene;
-}(_engine_Resizable__WEBPACK_IMPORTED_MODULE_2__["default"]);
+}(_engine_Resizable__WEBPACK_IMPORTED_MODULE_3__["default"]);
 
 /* harmony default export */ __webpack_exports__["default"] = (MainScene);
 
@@ -1234,7 +1268,7 @@ function () {
     value: function _addEvents() {
       var _this = this;
 
-      this._sprite.interactive = true;
+      this._sprite.interactive = false;
 
       this._sprite.on('pointerdown', function () {
         _this._data.isActive = true;
@@ -1259,8 +1293,6 @@ function () {
   }, {
     key: "moveTo",
     value: function moveTo(coords) {
-      var _this2 = this;
-
       var x = coords.x,
           y = coords.y;
       var direction = this._settings.direction;
@@ -1271,14 +1303,12 @@ function () {
           moveBoyAnimationTime = _this$_data$times.moveBoyAnimationTime,
           awaitTime = _this$_data$times.awaitTime;
 
-      this._playAnimation('hoverboard', true);
+      this._sprite.state.addAnimation(1, 'hoverboard', true, 0);
 
       this._moveTween = new tween_js__WEBPACK_IMPORTED_MODULE_2___default.a.Tween(this._container).to({
         x: x - boyXOffSetForMeeting * direction,
         y: y - boyYOffSetForMeeting
-      }, moveBoyAnimationTime).repeat(1).yoyo(true).repeatDelay(awaitTime).onComplete(function () {
-        _this2._playAnimation('idle', true);
-      }).start();
+      }, moveBoyAnimationTime).repeat(1).yoyo(true).repeatDelay(awaitTime).onComplete(function () {}).start();
       this._revertTween = new tween_js__WEBPACK_IMPORTED_MODULE_2___default.a.Tween(this._sprite).to({
         width: -this._sprite.width
       }, 10).delay(1500).repeat(1).yoyo(true).start();
@@ -1292,6 +1322,11 @@ function () {
     key: "hideArrow",
     value: function hideArrow() {
       this._arrow.alpha = 0;
+    }
+  }, {
+    key: "turnOnInteractive",
+    value: function turnOnInteractive() {
+      this._sprite.interactive = true;
     }
   }, {
     key: "isReady",
